@@ -50,32 +50,47 @@ class Data(object):
 
 image_path_base = "D:/code/pywork/image/"
 typelist = [
-            Data({'pages': 16, 'name': '奇幻','base':120}),
-            Data({'pages': 36, 'name': '全本','base':110}),
-            Data({'pages': 41, 'name': '玄幻','base':130}),
-            Data({'pages': 64, 'name': '都市','base':140}),
-            Data({'pages': 62, 'name': '言情','base':150}),
-            Data({'pages': 23, 'name': '仙侠','base':160}),
-            Data({'pages': 7, 'name': '武侠','base':170}),
-            Data({'pages': 29, 'name': '历史','base':180}),
-            Data({'pages': 5, 'name': '军事','base':190}),
-            Data({'pages': 18, 'name': '游戏','base':200}),
-            Data({'pages': 5, 'name': '竞技','base':210}),
-            Data({'pages': 28, 'name': '科幻','base':220}),
-            Data({'pages': 4, 'name': '灵异','base':230})
+            Data({'pages': 16, 'name': '奇幻','base':1000}),
+            Data({'pages': 36, 'name': '全本','base':1001}),
+            Data({'pages': 41, 'name': '玄幻','base':1002}),
+            Data({'pages': 64, 'name': '都市','base':1003}),
+            Data({'pages': 62, 'name': '言情','base':1004}),
+            Data({'pages': 23, 'name': '仙侠','base':1005}),
+            Data({'pages': 7, 'name': '武侠','base': 1006}),
+            Data({'pages': 29, 'name': '历史','base':1007}),
+            Data({'pages': 5, 'name': '军事','base': 1008}),
+            Data({'pages': 18, 'name': '游戏','base':1009}),
+            Data({'pages': 5, 'name': '竞技','base': 1010}),
+            Data({'pages': 28, 'name': '科幻','base':1011}),
+            Data({'pages': 4, 'name': '灵异','base': 1012})
 ]
 
 aoyulist = [
-            Data({'pages': 130, 'name': '玄幻魔法', 'index': 1,'base':620}),
-            Data({'pages': 71, 'name': '武侠修真', 'index': 2,'base':610}),
-            Data({'pages': 166, 'name': '都市言情', 'index': 3,'base':630}),
-            Data({'pages': 56, 'name': '历史军事', 'index': 4,'base':640}),
-            Data({'pages': 38, 'name': '网游动漫', 'index': 6,'base':650}),
-            Data({'pages': 55, 'name': '科幻小说', 'index': 7,'base':660}),
-            Data({'pages': 24, 'name': '恐怖灵异', 'index': 8,'base': 670}),
-            Data({'pages': 56, 'name': '其他类型', 'index': 9,'base':680}),
-            Data({'pages': 100, 'name': '女生小说', 'index': 5,'base': 690})
+            Data({'pages': 130, 'name': '玄幻魔法', 'index': 1,'base':1100}),
+            Data({'pages': 71, 'name': '武侠修真', 'index': 2,'base': 1101}),
+            Data({'pages': 166, 'name': '都市言情', 'index': 3,'base':1102}),
+            Data({'pages': 56, 'name': '历史军事', 'index': 4,'base': 1103}),
+            Data({'pages': 38, 'name': '网游动漫', 'index': 6,'base': 1104}),
+            Data({'pages': 55, 'name': '科幻小说', 'index': 7,'base': 1105}),
+            Data({'pages': 24, 'name': '恐怖灵异', 'index': 8,'base': 1106}),
+            Data({'pages': 56, 'name': '其他类型', 'index': 9,'base': 1107}),
+            Data({'pages': 100, 'name': '耽美同人', 'index': 5,'base':1108})
 ]
+
+gegelist = [
+            Data({'pages': 285, 'name': '玄幻魔法', 'index': 1, 'base': 1200,"prefix":'top/allvisit'}),
+            Data({'pages': 25,  'name': '武侠修真', 'index': 2, 'base': 1201,"prefix":'top/allvisit'}),
+            Data({'pages': 291, 'name': '都市言情', 'index': 3, 'base': 1202,"prefix":'top/allvisit'}),
+            Data({'pages': 188, 'name': '穿越历史', 'index': 4, 'base': 1203,"prefix":'top/allvisit'}),
+            Data({'pages': 4,   'name': '青春校园', 'index': 5, 'base': 1204,"prefix":'top/allvisit'}),
+            Data({'pages': 16, 'name':  '网游动漫', 'index': 6, 'base': 1205,"prefix":'top/allvisit'}),
+            Data({'pages': 127, 'name': '科幻小说', 'index': 7, 'base': 1206,"prefix":'top/allvisit'}),
+            Data({'pages': 26, 'name':  '恐怖灵异', 'index': 8, 'base': 1207,"prefix":'top/allvisit'}),
+            Data({'pages': 19, 'name':  '耽美同人', 'index': 9, 'base': 1208,"prefix":'top/allvisit'}),
+            Data({'pages': 597, 'name': '其他类型', 'index': 10,'base': 1209,"prefix":'top/allvisit'}),
+            Data({'pages': 2585, 'name': '排行榜',  'index': 11,'base': 1210,"prefix":'top/allvisit'})
+]
+
 
 '''
 ip，端口，类型(0高匿名，1透明)，protocol(0 http,1 https),country(国家),area(省市),updatetime(更新时间)
@@ -276,5 +291,5 @@ CHECK_PROXY={'function':'baidu_check'}#{'function':'checkProxy'}#
 MAX_CHECK_PROCESS = 2 # CHECK_PROXY最大进程数
 MAX_CHECK_CONCURRENT_PER_PROCESS = 30 # CHECK_PROXY时每个进程的最大并发
 TASK_QUEUE_SIZE = 50 # 任务队列SIZE
-MAX_DOWNLOAD_CONCURRENT = 3 # 从免费代理网站下载时的最大并发 
+MAX_DOWNLOAD_CONCURRENT = 3 # 从免费代理网站下载时的最大并发
 CHECK_WATI_TIME = 1#进程数达到上限时的等待时间
