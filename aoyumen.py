@@ -12,6 +12,7 @@ import  datetime
 import traceback
 from pymongo import MongoClient
 from IPProxyPool.config import Data, aoyulist
+from  pymongo.errors import  DuplicateKeyError
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -25,6 +26,8 @@ def upsertBook(modl):
             print('book: %s in db already' % modl.name)
         else:
             book_db.insert_one(modl.to_dict())
+    except DuplicateKeyError,e:
+        pass
     except Exception,e:
         print traceback.print_stack()
         print('db error:%s'% modl.name)
@@ -79,7 +82,7 @@ if __name__ == "__main__":
                     if book_url.find(host) == -1:
                         book_url = host + book_url
                     bookOne.url = book_url
-                    bookOne.id = str(tp.base) + str(j - 1 + 200) + str(ri+ 600)
+                    bookOne.id = str(tp.base) + str(j - 1 + 1000) + str(ri+ 1000)
                     bookOne.type = fenlei
                     bookOne.name = book
                     bookOne.chapters = []

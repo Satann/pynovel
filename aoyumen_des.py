@@ -11,6 +11,7 @@ import chardet
 import  datetime
 import traceback
 from pymongo import MongoClient
+from  pymongo.errors import  DuplicateKeyError
 from IPProxyPool.config import Data, aoyulist
 
 reload(sys)
@@ -25,6 +26,8 @@ def upsertBook(modl):
             print('book: %s in db already' % modl.name)
         else:
             book_db.insert_one(modl.to_dict())
+    except DuplicateKeyError,e:
+        pass
     except Exception,e:
         print traceback.print_stack()
         print('db error:%s'% modl.name)

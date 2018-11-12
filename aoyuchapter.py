@@ -12,6 +12,7 @@ import chardet
 import datetime
 import traceback
 from pymongo import MongoClient
+from pymongo.errors import DuplicateKeyError
 from IPProxyPool.config import Data, aoyulist
 
 reload(sys)
@@ -26,13 +27,25 @@ def upsertBook(modl):
             book_db.update_one({'name': modl.name}, {'$set': {'chapters': modl.chapters}})
         else:
             book_db.insert_one(modl.to_dict())
+    except DuplicateKeyError,e:
+        pass
     except Exception, e:
         print('db error:%s' % modl.name)
 
+import hashlib
+cpt_db = client.web.chapter
+def insertChpter(modl):
+    try:
+        cpt_db.insert_one(modl)
+    except DuplicateKeyError, e:
+        pass
+    except Exception, e:
+        print('db error:%s' % modl.name)
 
 if __name__ == "__main__":
+    steps = 2000
     while True:
-        bklist = list(book_db.find({"chapters": {"$elemMatch": {"status": 0, "catchcount": 0}}}).sort("id",-1).limit(1))
+        bklist = list(book_db.find({"chapters": {"$elemMatch": {"status": 0, "catchcount": 0}}}).sort("id").skip(steps).limit(1))
         if not bklist:
             break
         bk = bklist[0]
@@ -42,7 +55,7 @@ if __name__ == "__main__":
         while ii < len(bookOne.chapters):
             cptOne = bookOne.chapters[ii]
             ii += 1
-            if cptOne['status'] == 1:
+            if cptOne['status'] > 0:
                 continue
 
             while True:
@@ -76,9 +89,19 @@ if __name__ == "__main__":
                 continue
             for pgraf in page_contents:
                 cptOne['paragraphs'].append(pgraf)
-            cptOne['status'] = 1
+            cptOne['status'] = 2
             cptOne['catchcount'] = cptOne.get('catchcount', 0) + 1
             cptOne['intime'] = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            cptOne['id'] = str(cptOne['index']) + '_' + hashlib.md5((cptOne['url']).encode('gbk')).hexdigest()
+            cptOne['name'] = bookOne.name
+
+            ##cpt table
+            insertChpter(cptOne)
+            cptOne['paragraphs'] = []
+            cptOne.pop('id')
+            cptOne.pop('name')
+            if '_id' in cptOne:
+                cptOne.pop('_id')
             cppt += 1
             print ('[%s] %s' % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), cptOne['title']))
             if cppt % 10 == 0:

@@ -76,21 +76,19 @@ aoyulist = [
             Data({'pages': 56, 'name': '其他类型', 'index': 9,'base': 1107}),
             Data({'pages': 100, 'name': '耽美同人', 'index': 5,'base':1108})
 ]
-
 gegelist = [
-            Data({'pages': 285, 'name': '玄幻魔法', 'index': 1, 'base': 1200,"prefix":'top/allvisit'}),
-            Data({'pages': 25,  'name': '武侠修真', 'index': 2, 'base': 1201,"prefix":'top/allvisit'}),
-            Data({'pages': 291, 'name': '都市言情', 'index': 3, 'base': 1202,"prefix":'top/allvisit'}),
-            Data({'pages': 188, 'name': '穿越历史', 'index': 4, 'base': 1203,"prefix":'top/allvisit'}),
-            Data({'pages': 4,   'name': '青春校园', 'index': 5, 'base': 1204,"prefix":'top/allvisit'}),
-            Data({'pages': 16, 'name':  '网游动漫', 'index': 6, 'base': 1205,"prefix":'top/allvisit'}),
-            Data({'pages': 127, 'name': '科幻小说', 'index': 7, 'base': 1206,"prefix":'top/allvisit'}),
-            Data({'pages': 26, 'name':  '恐怖灵异', 'index': 8, 'base': 1207,"prefix":'top/allvisit'}),
-            Data({'pages': 19, 'name':  '耽美同人', 'index': 9, 'base': 1208,"prefix":'top/allvisit'}),
-            Data({'pages': 597, 'name': '其他类型', 'index': 10,'base': 1209,"prefix":'top/allvisit'}),
-            Data({'pages': 2585, 'name': '排行榜',  'index': 11,'base': 1210,"prefix":'top/allvisit'})
+            #Data({'pages': 285, 'name': '玄幻魔法', 'index': 1, 'base': 1200,"prefix":'lc/1_'}),
+            #Data({'pages': 25,  'name': '武侠修真', 'index': 2, 'base': 1201,"prefix":'lc/2_'}),
+            #Data({'pages': 291, 'name': '都市言情', 'index': 3, 'base': 1202,"prefix":'lc/3_'}),
+            #Data({'pages': 188, 'name': '穿越历史', 'index': 4, 'base': 1203,"prefix":'lc/4_'}),
+            #Data({'pages': 4,   'name': '青春校园', 'index': 5, 'base': 1204,"prefix":'lc/5_'}),
+            #Data({'pages': 16, 'name':  '网游动漫', 'index': 6, 'base': 1205,"prefix":'lc/6_'}),
+            #Data({'pages': 127, 'name': '科幻小说', 'index': 7, 'base': 1206,"prefix":'lc/7_'}),
+            #Data({'pages': 26, 'name':  '恐怖灵异', 'index': 8, 'base': 1207,"prefix":'lc/8_'}),
+            #Data({'pages': 19, 'name':  '耽美同人', 'index': 9, 'base': 1208,"prefix":'lc/9_'}),
+            #Data({'pages': 597, 'name': '其他类型', 'index': 10,'base': 1209,"prefix":'lc/10_'}),
+            Data({'pages': 2585, 'name': '排行榜',  'index': 11,'base': 1210,"prefix":'/top/allvisit_'})
 ]
-
 
 '''
 ip，端口，类型(0高匿名，1透明)，protocol(0 http,1 https),country(国家),area(省市),updatetime(更新时间)
@@ -291,5 +289,5 @@ CHECK_PROXY={'function':'baidu_check'}#{'function':'checkProxy'}#
 MAX_CHECK_PROCESS = 2 # CHECK_PROXY最大进程数
 MAX_CHECK_CONCURRENT_PER_PROCESS = 30 # CHECK_PROXY时每个进程的最大并发
 TASK_QUEUE_SIZE = 50 # 任务队列SIZE
-MAX_DOWNLOAD_CONCURRENT = 3 # 从免费代理网站下载时的最大并发
+MAX_DOWNLOAD_CONCURRENT = 3 # 从免费代理网站下载时的最大并发 
 CHECK_WATI_TIME = 1#进程数达到上限时的等待时间
