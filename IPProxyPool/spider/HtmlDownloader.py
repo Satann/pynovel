@@ -76,9 +76,9 @@ class Html_Downloader(object):
                 }
             global httpcount
             httpcount += 1
-            if httpcount % 20 == 0:
-                proxies = {}
-                ip = None
+            #if httpcount % 200000 == 0:
+            #    proxies = {}
+            #    ip = None
             try:
                 if proxies:
                     r = requests.get(url=url, headers=config.get_header(), timeout=config.TIMEOUT, proxies=proxies)
@@ -146,28 +146,28 @@ class Html_Downloader(object):
         while count < config.RETRY_TIME:
             global httpcount
             httpcount += 1
-            if httpcount % 20 != 0:
-                proxies = {}
-                ip = None
-            else:
-                r127 = requests.get('http://127.0.0.1:8000/?types=0&count=10')
-                if not r127.text: continue
+            #if httpcount % 200000 == 0:
+            #    proxies = {}
+            #    ip = None
+            #else:
+            r127 = requests.get('http://127.0.0.1:8000/?types=0&count=30')
+            if not r127.text: continue
+            ip_ports = json.loads(r127.text)
+            if not ip_ports:
+                r127 = requests.get('http://127.0.0.1:8000/?types=2')
                 ip_ports = json.loads(r127.text)
                 if not ip_ports:
-                    r127 = requests.get('http://127.0.0.1:8000/?types=2')
-                    ip_ports = json.loads(r127.text)
-                    if not ip_ports:
-                        # raise Exception('no proxy')
-                        print ('no proxy')
-                        proxies = {}
-                if ip_ports:
-                    proxy = random.choice(ip_ports)
-                    ip = proxy[0]
-                    port = proxy[1]
-                    proxies = {
-                        'http': 'http://%s:%s' % (ip, port),
-                        'https': 'http://%s:%s' % (ip, port)
-                    }
+                    # raise Exception('no proxy')
+                    print ('no proxy')
+                    proxies = {}
+            if ip_ports:
+                proxy = random.choice(ip_ports)
+                ip = proxy[0]
+                port = proxy[1]
+                proxies = {
+                    'http': 'http://%s:%s' % (ip, port),
+                    'https': 'http://%s:%s' % (ip, port)
+                }
             try:
                 if proxies:
                     r = requests.get(url=url, headers=config.get_header(), timeout=config.TIMEOUT, proxies=proxies)
@@ -206,6 +206,8 @@ class Html_Downloader(object):
                 if (not r.ok):  # if r.status_code != 200:  # or len(r.content) < 500:
                     if len(r.content) < 500:
                         print r.content
+                    if r.reason == "Not Found" and len(r.content) == 1163 and r.status_code == 404:
+                        return 'self', None
                     raise ConnectionError
                 else:
                     if ip and proxies:
@@ -242,8 +244,7 @@ class Html_Downloader(object):
                 ip = proxy[0]
                 port = proxy[1]
                 proxies = {"http": "http://%s:%s" % (ip, port), "https": "http://%s:%s" % (ip, port)}
-                print ('img ip: %s' % ip)
-                r = requests.get(url=url, headers=config.get_header(), timeout=config.TIMEOUT, proxies=proxies)
+                r = requests.get(url=url, headers=config.get_header(), timeout=config.TIMEOUT,)
                 r.encoding = chardet.detect(r.content)['encoding']
                 if r.status_code == 200:
                     if len(r.content) == 0:

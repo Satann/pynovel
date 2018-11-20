@@ -60,7 +60,7 @@ if __name__ == "__main__":
 
             while True:
                 try:
-                    pgip, page_str = Html_Downloader.downloadProxyLittle(cptOne['url'])
+                    pgip, page_str = Html_Downloader.downloadProxy(cptOne['url'])
                     page_str = page_str.encode('latin-1')
                     page_root = etree.HTML(page_str)
                     pgip = None
@@ -103,7 +103,7 @@ if __name__ == "__main__":
             if '_id' in cptOne:
                 cptOne.pop('_id')
             cppt += 1
-            print ('[%s] %s' % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), cptOne['title']))
+            print ('[%s] %s' % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'), cptOne['title'].decode('utf-8')))
             if cppt % 10 == 0:
                 upsertBook(bookOne)
         upsertBook(bookOne)

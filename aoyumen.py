@@ -77,25 +77,29 @@ if __name__ == "__main__":
                         bookOne = None
                         continue
 
-                    fenlei = r.xpath('*[@class="s1"]//text()')[0].strip()[1:-1]
+                    fenlei = r.xpath('*[@class="s1"]//text()')[0].strip()
                     book_url = r.xpath('*[@class="s2"]/a//@href')[0].strip()
                     if book_url.find(host) == -1:
                         book_url = host + book_url
                     bookOne.url = book_url
-                    bookOne.id = str(tp.base) + str(j - 1 + 1000) + str(ri+ 1000)
-                    bookOne.type = fenlei
-                    bookOne.name = book
-                    bookOne.chapters = []
-                    bookOne.flags = [bookOne.type]
-                    bookOne.image = ''
-                    bookOne.click = 0
-                    bookOne.status = 0
-                    bookOne.numbers = 0
+
                     bookOne.intime = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
                     bookOne.writetime = ''
-                    bookOne.author = ''
                     bookOne.lastpage = ''
                     bookOne.lasttime = ''
+                    #######
+                    bookOne.id = str(tp.base) + str(j - 1 + 1000) + str(ri + 1000)
+                    bookOne.type = fenlei[1:-1] if len(fenlei) > 1 and fenlei[1:-1] else ''
+                    bookOne.name = book
+                    bookOne.chapters = []
+                    bookOne.flags = [bookOne.type] if bookOne.type else []
+                    bookOne.image = ''
+                    bookOne.srcImg = ''
+                    bookOne.click = 0
+                    bookOne.status = 0
+                    bookOne.state = 0
+                    bookOne.numbers = 0
+                    bookOne.recommend = 0
 
                     try:
                         last_page = r.xpath('*[@class="s2"]/i/a/text()')[0].strip()
@@ -111,6 +115,8 @@ if __name__ == "__main__":
                         last_time = r1.xpath('*[@class="s4"]/text()')[0].strip()
 
                     bookOne.author = author
+                    if not book or not author:
+                        pass
                     bookOne.lastpage = last_page
                     bookOne.lasttime = last_time
 

@@ -57,10 +57,9 @@ if __name__ == "__main__":
         if not tp:
             continue
 
-        j = 1
-        while j < tp.pages + 1:
+        j = 1300
+        while j < 1778:
             j += 1
-            s = tp.name
             host = 'http://www.ggdown.com'
             urll = host + str(tp.prefix) + str(j - 1) + '.html'
             while True:
@@ -90,22 +89,8 @@ if __name__ == "__main__":
             for ri, r in enumerate(rows):
                 try:
                     bookOne = Data()
-                    fenlei = r.xpath('*[@class="s1"]/text()')[0].strip()
-                    book = r.xpath('*[@class="s2"]/a[1]//text()')[0].strip()
-                    book_url = r.xpath('*[@class="s2"]/a[1]//@href')[0].strip()
-                    if book_url.find(host) == -1:
-                        book_url = host + book_url
-                    author = r.xpath('*[@class="s3"]/text()')[0].strip()
-                    last_time = r.xpath('*[@class="s4"]/text()')[0].strip()
-                    last_page = r.xpath('*[@class="s2"]/i/a/text()')[0].strip()
-                    bookOne.id = str(tp.base) + str(j - 1 + 1000) + str(ri + 1000)
-                    bookOne.type = fenlei[1:-1] if len(fenlei) > 1 and fenlei[1:-1] else ''
-                    bookOne.name = book
-                    bookOne.author = author
-                    if not book or not author:
-                        pass
-                    bookOne.chapters = []
-                    bookOne.flags = [bookOne.type] if bookOne.type else []
+                    bookOne.flags = []
+                    bookOne.author = ''
                     bookOne.image = ''
                     bookOne.srcImg = ''
                     bookOne.click = 0
@@ -113,7 +98,31 @@ if __name__ == "__main__":
                     bookOne.state = 0
                     bookOne.numbers = 0
                     bookOne.recommend = 0
+                    bookOne.chapters = []
+                    fenlei = r.xpath('*[@class="s1"]/text()')[0].strip()
+                    book = r.xpath('*[@class="s2"]/a[1]//text()')[0].strip()
+                    book = re.sub(re.compile(u'(\(.*?\))|\[.*?\]|（.*?）'), '' , book).strip()
+                    bookOne.name = book
+
+                    if book_db.find_one({'name': bookOne.name}):
+                        #updateId(bookOne)
+                        #print bookOne.name,'in db'
+                        bookOne = None
+                        continue
+                    book_url = r.xpath('*[@class="s2"]/a[1]//@href')[0].strip()
+                    if book_url.find(host) == -1:
+                        book_url = host + book_url
                     bookOne.url = book_url
+                    author = r.xpath('*[@class="s3"]/text()')[0].strip()
+                    last_time = r.xpath('*[@class="s4"]/text()')[0].strip()
+                    last_page = r.xpath('*[@class="s2"]/i/a/text()')[0].strip()
+                    bookOne.id = str(tp.base) + str(j - 1 + 1000) + str(ri + 1000)
+                    bookOne.type = fenlei[1:-1] if len(fenlei) > 1 and fenlei[1:-1] else ''
+                    if not book or not author:
+                        print urll,book,author,book_url
+                        continue
+                    bookOne.author = author
+                    bookOne.flags = [bookOne.type] if bookOne.type else []
 
                     while True:
                         try:
@@ -150,14 +159,18 @@ if __name__ == "__main__":
                         ###img
                         if book_root.xpath('//div[@class="book-img"]/img/@src'):
                             img_url = book_root.xpath('//div[@class="book-img"]/img/@src')[0].strip()
-                            imgpath = hashlib.md5((bookOne.name + bookOne.author).encode('gbk')).hexdigest() + os.path.splitext(img_url)[1]
-                            if img_url.find(host) == -1:
-                                img_url = host + img_url if img_url[0] == '/' else host + '/' + img_url
-                            bookOne.srcImg = img_url
-                            imgret = Html_Downloader.downimage(img_url, imgpath)
-                            if imgret:
-                                bookOne.image = imgpath
-                                imgret = None
+                            if img_url == 'http://www.ggdown.com/modules/article/images/nocover.jpg':
+                                bookOne.srcImg = img_url
+                                bookOne.image = 'nocover.jpg'
+                            else:
+                                imgpath = hashlib.md5((bookOne.name + bookOne.author).encode('gbk')).hexdigest() + os.path.splitext(img_url)[1]
+                                if img_url.find(host) == -1:
+                                    img_url = host + img_url if img_url[0] == '/' else host + '/' + img_url
+                                bookOne.srcImg = img_url
+                                imgret = Html_Downloader.downimage(img_url, imgpath)
+                                if imgret:
+                                    bookOne.image = imgpath
+                                    imgret = None
 
                         ###url
                         book_url = book_root.xpath('//*[@class="book-link"]//a[2]//@href')[0].strip()
@@ -166,17 +179,18 @@ if __name__ == "__main__":
                     except Exception, e:
                         print traceback.print_exc()
                     if book_db.find_one({'name': bookOne.name}):
-                        updateId(bookOne)
+                        #updateId(bookOne)
+                        print bookOne.name,'in db'
                         bookOne = None
                         continue
 
                     ###chapters
                     while True:
                         try:
-                            bip, page_str = Html_Downloader.downloadProxyLittle((book_url))
+                            pip, page_str = Html_Downloader.downloadProxyLittle((book_url))
                             page_str = page_str.encode('latin-1')
                             page_root = etree.HTML(page_str)
-                            bip = None
+                            pip = None
                             break
                         except UnicodeDecodeError,e:
                             page_str = page_str.decode('gbk', 'ignore')
@@ -188,16 +202,23 @@ if __name__ == "__main__":
                                 continue
                             print traceback.print_exc()
                             if bip and page_str != None:
-                                requests.get('http://127.0.0.1:8008/delete?ip=%s' % bip)
-                                print ('book response error, deeltip %s' % bip)
+                                requests.get('http://127.0.0.1:8008/delete?ip=%s' % pip)
+                                print ('book response error, deeltip %s' % pip)
                                 print page_str
+                            if pip == 'self' and page_str == None:
+                                break
                             continue
+                    if pip == 'self' and page_str == None:
+                        upsertBook(bookOne)
+                        print bookOne.name,'already 404'
+                        bookOne = None
+                        continue
                     bookOne.profile = ''.join(page_root.xpath('//p[@class="intro"]/text()')).strip()
                     cpt_list = page_root.xpath('//*[@class="chapterlist"]//a')
                     for cptindex, cpt in enumerate(cpt_list):
                         chapterOne = Data()
                         chapterOne.index = cptindex + 1
-                        chapterOne.status = 0
+                        chapterOne.status = 10
                         chapterOne.readcount = 0
                         chapterOne.catchcount = 0
                         chapterOne.recommend = 0
